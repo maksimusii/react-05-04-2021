@@ -11,7 +11,7 @@ export default class Layout extends React.Component {
         chatId: PropTypes.string,
         children: PropTypes.node.isRequired
     };
-
+    
     render() {
         const { chatId, children, title } = this.props;
 
