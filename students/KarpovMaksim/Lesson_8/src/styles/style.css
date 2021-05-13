@@ -7,21 +7,11 @@ html, body, #app {
   display: flex;
   flex-direction: column;
   background-color: #e2e2e2;
-  height: 300px;
+  height: 100%;
   width: 100%;
   padding: 20px;
   overflow-y: scroll;
   box-sizing: border-box;
-}
-
-.layout {
-  height: 100%;
-  width: 700px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
 }
 
 .message {
@@ -44,7 +34,7 @@ html, body, #app {
 }
 .chat-list {
   height: 100%;
-  width: 30%;
+  width: 50%;
 }
 .chat-content {
   display: flex;
@@ -105,4 +95,60 @@ html, body, #app {
 }
 .profile a{
   margin-left: 20px;
+}
+
+.chat-list-unread {
+  background-color: #3f51b5;
+  font-size: 32px;
+  animation: pulse 0.5s linear;
+  box-shadow: 0 0 4px #3f51b5;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+}
+
+@keyframes pulse {
+  0% {
+      transform: scale(0.8, 0.8);
+  }
+
+  50% {
+      transform: scale(1.2, 1.2);
+  }
+
+  100% {
+      transform: scale(1, 1);
+  }
+}
+
+.chat-list-delete {
+  display: none !important;
+  position: absolute;
+}
+
+.chat-list-item:hover .chat-list-delete {
+  display: inline-flex !important;
+}
+.chat-list-name {
+  width: 100px;
+  display: block;
+}
+
+.layout {
+  height: 100%;
+}
+
+.layout-content {
+  display: flex;
+  height: calc(100% - 140px);
+  background-color: #e2e2e2;
+}
+
+.layout-content-left {
+  width: 30%;
+  border-right: 1px solid #ccc;
+}
+
+.layout-content-right {
+  width: 70%;
 }

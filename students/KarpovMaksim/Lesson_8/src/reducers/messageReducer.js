@@ -14,15 +14,15 @@ const initialStore = {
 export default function messageReducer(store = initialStore, action) {
   switch (action.type) {
       case SEND_MESSAGE: {
-          const { messageId, text, userName } = action;
+          const { text, userName } = action;
           return {
               messages: {
+                  ...store,
+                  messages,
                   ...store.messages,
                   [messageId]: {
-                      id: messageId,
-                      text: text,
-                      userName: userName
-
+                      text,
+                      userName
                   }
               }
           };
@@ -40,12 +40,12 @@ export default function messageReducer(store = initialStore, action) {
         }
     }
     case LOAD_MESSAGES_SUCCESS: {
-        const { messages } = action.payload.entities;
+        const { messages = {} } = action.payload.entities;
 
         return {
             ...store,
-            messages,
-            isLoading: false
+            isLoading: false,
+            messages
         }
     }
       default:

@@ -17,11 +17,11 @@ export default class Layout extends React.Component {
         return (
             <Container className="layout">
                 <Header title={title} />
-                <div className="chat-content">
+                <div className="layout-content">
                     <div className="layout-content-left">
                         <ChatList chatId={chatId} />
                     </div>
-                    <div className="message-content">
+                    <div className="layout-content-right">
                         { children }
                     </div>
                 </div>

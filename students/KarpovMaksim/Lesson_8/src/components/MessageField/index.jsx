@@ -30,11 +30,19 @@ export default class MessageField extends React.Component {
   }
   
   componentDidMount() {
-    this.props.loadMessages();
+    const {chatId, loadMessages} = this.props;
+    loadMessages(chatId);
   }
-  componentDidUpdate() {
-     //this.messageFieldRef.current.scrollTop = 
-     //this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
+  componentDidUpdate(prevProps) {
+    const {chatId, loadMessages} = this.props;
+    
+    if (prevProps.chatId !== chatId) {
+      loadMessages(chatId);
+  }
+  if (this.messageFieldRef.current != null) {
+    this.messageFieldRef.current.scrollTop = 
+    this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
+  }
   }
 
   handleInputKeyUp = (event) => {
@@ -65,16 +73,13 @@ export default class MessageField extends React.Component {
   }
   render() {
     
-    const { chats, chatId, messages, isLoading } = this.props;
+    const { chatId, messages, isLoading } = this.props;
    
     if (isLoading) {
       return <CircularProgress />
     }
-    if (Object.keys(chats).length === 0) {
-     return <div ref={this.messageFieldRef} className='message-field'>Чатов не найдено</div>
-    }
-    const messageElements = chats[chatId]?.messageList.map((messageId) => {
-      const { text, userName } = messages[messageId];
+    const messageElements = Object.entries(messages).map(([messageId, message]) => {
+      const { text, userName } = message;
 
       return (
           <Message
@@ -85,30 +90,33 @@ export default class MessageField extends React.Component {
               userName={userName} />
       )
   });
+
+  
      
-    return <div>
-      <div ref={this.messageFieldRef} className='message-field'>
-        { messageElements }
-      </div>
-      <div className="actions">
-        <TextField
-          style={{ marginRight: '12px', marginLeft: '12px' }}
-          fullWidth
-          placeholder="введите сообщение"
-          type="text"
-          autoFocus
-          value={this.state.input} 
-          onChange={this.handleChange}
-          onKeyUp={this.handleInputKeyUp} />
-        <Fab
-          color="primary" 
-          aria-label="add"
-          disabled={!this.state.input}
-          onClick={this.sendMessage}>
-          <SendIcon />
-        </Fab>
-      </div>
-    </div> 
-   }
+    return (
+      <>
+        <div ref={this.messageFieldRef} className='message-field'>
+          { messageElements }
+        </div>
+        <div className="actions">
+          <TextField
+            style={{ marginRight: '12px', marginLeft: '12px' }}
+            fullWidth
+            placeholder="введите сообщение"
+            type="text"
+            autoFocus
+            value={this.state.input} 
+            onChange={this.handleChange}
+            onKeyUp={this.handleInputKeyUp} />
+          <Fab
+            color="primary" 
+            aria-label="add"
+            disabled={!this.state.input}
+            onClick={this.sendMessage}>
+            <SendIcon />
+          </Fab>
+        </div>
+      </> )
+    }
 } 
 

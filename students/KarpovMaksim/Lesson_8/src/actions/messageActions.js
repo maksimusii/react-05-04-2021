@@ -17,18 +17,21 @@ export const sendMessage = (messageId, text, userName, chatId) => {
   }
 };
 
-export const loadMessages = () => {
+export const loadMessages = (chatId) => {
   return createAction ({
-    endpoint: '/api/messages.json',
+    endpoint: `/api/messages?chatId=${chatId}`,
     method: 'GET',
     types: [
-      LOAD_MESSAGES_REQUEST,{ 
-        type: LOAD_MESSAGES_SUCCESS,
-        payload: async (action, state, res) =>
-        {
-          const json = await res.json();
-          return normalize(json, [messages]) 
-        }
-      }, LOAD_MESSAGES_ERROR ]
+      LOAD_MESSAGES_REQUEST,
+        { 
+          type: LOAD_MESSAGES_SUCCESS,
+          payload: async (action, state, res) =>
+          {
+            const json = await res.json();
+            return normalize(json, [messages]) 
+          }
+        },
+      LOAD_MESSAGES_ERROR 
+    ]
   })
 };

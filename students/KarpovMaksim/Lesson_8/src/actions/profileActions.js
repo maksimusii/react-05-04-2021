@@ -9,7 +9,7 @@ export const LOAD_PROFILE_ERROR = '@@chat/LOAD_PROFILE_ERROR';
 
 export const loadProfile = () => {
   return createAction ({
-    endpoint: '/api/profile.json',
+    endpoint: '/api/profile',
     method: 'GET',
     types: [
       LOAD_PROFILE_REQUEST,{ 

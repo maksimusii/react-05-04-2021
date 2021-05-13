@@ -9,18 +9,21 @@ import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-
-
 export default class ChatList extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool,
+    isAdding: PropTypes.bool,
     chatId: PropTypes.string,
-    chats: PropTypes.object.isRequired,
+    chats: PropTypes.objectOf(PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      unread: PropTypes.bool,
+      isDeleting: PropTypes.bool,
+    })).isRequired,
     addChat: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
     deleteChat: PropTypes.func.isRequired,
     loadChats: PropTypes.func.isRequired,
-    loadMessages: PropTypes.func.isRequired,
+    //loadMessages: PropTypes.func.isRequired,
 
   };
 
@@ -30,7 +33,7 @@ export default class ChatList extends React.Component {
   
   componentDidMount() {
     this.props.loadChats();
-    this.props.loadMessages();
+    //this.props.loadMessages();
   }
 
   handlerChatNameChange = (event) => {
@@ -40,7 +43,13 @@ export default class ChatList extends React.Component {
   };
 
   handlerAddChatClick = () => {
-    this.props.addChat(this.state.chatName, 1);
+    const { chats, addChat } = this.props;
+    const id = Number(Object.keys(chats).pop()) + 1;
+
+    addChat({
+      id: id || 1,
+      title: this.state.chatName
+      });
     this.setState( {
         chatName: ''
       }
@@ -52,50 +61,40 @@ export default class ChatList extends React.Component {
   };
 
   hadlerDeleteChatClick = (event) => {
-    this.props.deleteChat(event.currentTarget.dataset.id);
-    this.handleNavigate('/');
-    
+    event.stopPropagation();
+    this.props.deleteChat(event.currentTarget.dataset.id);  
   }
+
   render() {
     const { chatName } = this.state;
-    const { chats, isLoading } = this.props;
+    const { chats, isLoading, isAdding } = this.props;
     if (isLoading) {
       return <CircularProgress />
-    }
-    if (Object.keys(chats).length === 0) {
-      return  <div className="chat-list-field">
-        Нет чатов
-        <List>
-          <ListItem button >
-              <TextField 
-                value={chatName}
-                placeholder='Enter new chat name' 
-                onChange={this.handlerChatNameChange}/>
-              <IconButton
-                onClick={this.handlerAddChatClick}
-                disabled={!chatName}>
-                <SendIcon />
-              </IconButton>
-            </ListItem>
-        </List>
-        </div>
     }
     return (
       <div className="chat-list-field">
         <List>
-        {Object.entries(chats).map(([id, value]) => 
-          !value.isRemoved?(
-            <ListItem key={id} button selected={id === this.props.chatId} >
-              <div className='chat-list-icon' onClick={ () => this.handleNavigate(`/chat/${id}`) }></div>
+        {Object.entries(chats).map(([id, value]) => (
+          
+            <ListItem 
+              className='chat-list-item' 
+              key={id} 
+              button
+              onClick={ () => this.handleNavigate(`/chat/${id}`) } 
+              selected={id === this.props.chatId} >
+            <div className='chat-list-icon' onClick={ () => this.handleNavigate(`/chat/${id}`) }></div>
               <ListItemText 
                 primary={value.title} 
-                onClick={ () => this.handleNavigate(`/chat/${id}`) }/>
-              <IconButton  data-id={id} onClick={this.hadlerDeleteChatClick}>
+                className='chat-list-name' />
+                { value.unread ? <div className='chat-list-unread' /> : 
+                  value.isDeleting ? <CircularProgress size={20} /> : null 
+                }
+              <IconButton  className='chat-list-delete' data-id={id} onClick={this.hadlerDeleteChatClick}>
                 <DeleteIcon  />
               </IconButton>
-            </ListItem>
-            
-          ): null)}
+            </ListItem>   
+        ))}
+          {isAdding && <CircularProgress size={20} />}
           <ListItem button >
             <TextField 
               value={chatName}
