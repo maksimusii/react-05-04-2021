@@ -6,20 +6,29 @@ import { NavLink } from 'react-router-dom';
 export default class Header extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    profile: PropTypes.shape({
+    profile: PropTypes.objectOf(PropTypes.shape({
       firstName: PropTypes.string.isRequired,
       lastName: PropTypes.string.isRequired
-    }).isRequired
+    })).isRequired,
   };
+
+   componentDidMount() {
+        this.props.loadProfile();
+    }
 
   render() {
 
-    const { profile, title } = this.props;
+    let { firstName, lastName, age, photo } = this.props.profile;
+
+    const { title } = this.props;
 
     return (
       <div className={s.header}>
         <div className={s.messagerContainer}>
-          <NavLink className={s.headerText} to='/profile'>Profile: {profile.firstName} {profile.lastName}</NavLink>
+          <div className={s.profileInfo}>
+            <img className={s.profilePhoto} src={photo} alt="img" />
+            <NavLink className={s.headerText} to='/profile'>{firstName} {lastName}</NavLink>
+          </div>
           <p className={s.headerText}>{title}</p>
         </div>
       </div>

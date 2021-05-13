@@ -11,7 +11,7 @@ import "./style.css";
 export default class Profile extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool,
-    user: PropTypes.objectOf(
+    users: PropTypes.objectOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
         firstName: PropTypes.string.isRequired,
@@ -27,8 +27,8 @@ export default class Profile extends React.Component {
     this.props.loadProfile();
   }
   render() {
-    const { user, isLoading } = this.props;
-    const userId = Number(Object.keys(user).pop());
+    const { users, isLoading } = this.props;
+    const userId = Number(Object.keys(users).pop());
 
     if (isLoading) {
       return <CircularProgress />;
@@ -36,15 +36,15 @@ export default class Profile extends React.Component {
     return (
       <Card>
         <img
-          src={"img/" + user[userId]?.photo}
+          src={"img/" + users[userId]?.photo}
           alt="Photo by Filipp Romanovski on Unsplash"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {user[userId]?.firstName} {user[userId]?.lastName}
+            {users[userId]?.firstName} {users[userId]?.lastName}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {user[userId]?.bio}
+            {users[userId]?.bio}
           </Typography>
         </CardContent>
       </Card>

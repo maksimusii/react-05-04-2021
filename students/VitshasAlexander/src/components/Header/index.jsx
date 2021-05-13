@@ -15,7 +15,7 @@ export default class Header extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool,
     title: PropTypes.string.isRequired,
-    user: PropTypes.objectOf(
+    users: PropTypes.objectOf(
       PropTypes.shape({
         firstName: PropTypes.string.isRequired,
         lastName: PropTypes.string.isRequired,
@@ -34,8 +34,8 @@ export default class Header extends React.Component {
   };
 
   render() {
-    const { user, title, isLoading } = this.props;
-    const userId = Number(Object.keys(user).pop());
+    const { users, title, isLoading } = this.props;
+    const userId = Number(Object.keys(users).pop());
     if (isLoading) {
       return <CircularProgress />;
     }
@@ -52,12 +52,13 @@ export default class Header extends React.Component {
           <Typography variant="h6">{title}</Typography>
           <Avatar
             onClick={() => {
-                this.handleLinkClick(`/profile`);
-              }}
-            className="header-profile-avatar">
-              {user[userId]?.firstName?.charAt(0)}
-              {user[userId]?.lastName?.charAt(0)}
-            </Avatar>
+              this.handleLinkClick(`/profile`);
+            }}
+            className="header-profile-avatar"
+          >
+            {users[userId]?.firstName?.charAt(0)}
+            {users[userId]?.lastName?.charAt(0)}
+          </Avatar>
         </Toolbar>
       </AppBar>
     );

@@ -1,18 +1,15 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { addChat, markChatRead, loadChats } from '../actions/chatActions';
+import { addChat, markChatRead, loadChats, deleteChat } from '../actions/chatActions';
 import ChatList from '../components/ChatList';
 
 const mapStateToProps = (store) => {
-    return {
-        chats: store.chatReducer.chats,
-        isLoading: store.chatReducer.isLoading
-    };
+    return store.chatReducer;
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+    deleteChat,
     loadChats,
     markChatRead,
     addChat,

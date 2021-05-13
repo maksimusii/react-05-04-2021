@@ -1,20 +1,18 @@
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { sendMessage } from "../actions/messageActions";
+import { sendMessage, loadMessages } from "../actions/messageActions";
 import MessageFields from "../components/MessageFields";
 
 const mapStateToProps = (store) => {
-  return {
-    chats: store.chatReducer.chats,
-    messages: store.messageReducer.messages,
-  };
+  return store.messageReducer;
 };
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       sendMessage,
+      loadMessages,
     },
     dispatch
   );

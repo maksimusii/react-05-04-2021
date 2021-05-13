@@ -1,5 +1,5 @@
 import React from "react";
-import Message from "../Message/Message";
+import Message from "../Message";
 import TextField from "@material-ui/core/TextField";
 import Fab from "@material-ui/core/Fab";
 import SendIcon from "@material-ui/icons/Send";
@@ -53,7 +53,7 @@ export default class MessageField extends React.Component {
     const { chats, messages, chatId } = this.props;
     const { input } = this.state;
 
-    const messageElements = chats[chatId].messageList.map(
+    const messageElements = chats[chatId]?.messageList.map(
       (messageId, index) => {
         const message = messages[messageId];
         return (

@@ -1,0 +1,20 @@
+[
+  {
+    "chatId": 1,
+    "text": "1",
+    "sender": "human",
+    "id": 1
+  },
+  {
+    "chatId": 1,
+    "text": "Filipp! Я просто тоже тролль. Я Чат 1.",
+    "sender": "robot",
+    "id": 2
+  },
+  {
+    "chatId": 2,
+    "text": "2",
+    "sender": "human",
+    "id": 3
+  }
+]

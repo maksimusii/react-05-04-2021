@@ -1,0 +1,14 @@
+[
+  {
+    "chatId": 1,
+    "text": "привет",
+    "sender": "me",
+    "id": 1
+  },
+  {
+    "chatId": 1,
+    "text": "⯓ ⯓ ⯓ ⯓",
+    "sender": "bot",
+    "id": 2
+  }
+]

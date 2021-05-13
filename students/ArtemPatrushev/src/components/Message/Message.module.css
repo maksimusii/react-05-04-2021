@@ -6,6 +6,11 @@
     margin: 5px;
     color: #fff;
     font-family: sans-serif;
+    width: auto;
+}
+
+.messageBox {
+    display: flex;
 }
 
 .messageSender {

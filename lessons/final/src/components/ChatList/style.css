@@ -1,0 +1,37 @@
+div.chat-list-avatar {
+    margin-right: 12px;
+    background-color: #3f51b5;
+}
+
+.chat-list-item:hover .chat-list-delete {
+    opacity: 1;
+}
+
+.chat-list-delete {
+    opacity: 0;
+}
+
+.chat-list-unread {
+    background-color: #3f51b5;
+    font-size: 32px;
+    animation: pulse 0.5s linear;
+    box-shadow: 0 0 4px #3f51b5;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8, 0.8);
+    }
+
+    50% {
+        transform: scale(1.2, 1.2);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+}
+

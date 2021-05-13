@@ -8,7 +8,7 @@ import Header from "../components/Header";
 
 const mapStateToProps = (store) => {
   return {
-    user: store.profileReducer.user,
+    users: store.profileReducer.users,
     isLoading: store.profileReducer.isLoading,
   };
 };

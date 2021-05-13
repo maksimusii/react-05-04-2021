@@ -29,8 +29,6 @@ export default class ChatList extends React.Component {
     markChatRead: PropTypes.func.isRequired,
     loadChats: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
-    goForward: PropTypes.func.isRequired,
-    goBack: PropTypes.func.isRequired,
   };
 
   state = {
@@ -48,7 +46,15 @@ export default class ChatList extends React.Component {
   };
 
   onAddChat = () => {
-    this.props.addChat(this.state.chatName);
+    const { chats, addChat } = this.props;
+
+    const id = Number(Object.keys(chats).pop()) + 1;
+
+    addChat({
+      id: id || 1,
+      title: this.state.chatName,
+    });
+
     this.setState({
       chatName: "",
     });
@@ -105,7 +111,7 @@ export default class ChatList extends React.Component {
                 {value.title.split(" ").map((w) => w.charAt(0))}
               </Avatar>
               <ListItemText primary={value.title} />
-              { value.unread && <div className='chat-list-unread' /> }
+              {value.unread && <div className="chat-list-unread" />}
             </ListItem>
           ))}
           <ListItem

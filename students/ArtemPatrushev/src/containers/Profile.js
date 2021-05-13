@@ -1,8 +1,18 @@
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {loadProfile} from '../Actions/profileAction.js';
 import Profile from '../components/Profile/Profile.jsx';
 
 const mapStateToProps = (store) => {
-    return store.profileReducer
+    // debugger;
+    return {
+        profile: store.profileReducer.profile,
+        isLoading: store.profileReducer.isLoading,
+    }
 };
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    loadProfile
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

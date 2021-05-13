@@ -8,14 +8,13 @@ import SideBar from '../sideBar/sideBar.jsx';
 export default class Layout extends React.Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
-        chatId: PropTypes.string,
         children: PropTypes.node.isRequired
     };
 
     render() {
 
-        const { chatId, children, title } = this.props;
-        console.log(title);
+        const { children, title } = this.props;
+        console.log(title)
         // const { chatId, chats } = this.props;
         // const { messages } = this.props;
 
@@ -29,8 +28,10 @@ export default class Layout extends React.Component {
                 <div className={s.container}>
                     <SideBar />
                     <div className={s.messagerContainer} >
-                        <ChatList 
-                            chatId={chatId} />
+                        {/* <div>
+                            <ChatList
+                                chatId={chatId} />
+                        </div> */}
                         { children }
                         {/* <MessageField 
                             // messages={activeMessages}

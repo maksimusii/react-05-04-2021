@@ -5,12 +5,7 @@ import {
 } from "../actions/profileActions";
 
 const initialStore = {
-  user: {
-    // firstName: "Filipp",
-    // lastName: "Romanovski",
-    // bio: "My Route to Santiago de Compostela",
-    // photo: "filipp-romanovski-eejet4GDlzc-unsplash.jpg",
-  },
+  users: {},
   isLoading: false,
 };
 
@@ -29,11 +24,11 @@ export default function profileReducer(store = initialStore, action) {
       };
     }
     case LOAD_PROFILE_SUCCESS: {
-      const { user } = action.payload.entities;
+      const { users } = action.payload.entities;
       //debugger;
       return {
         ...store,
-        user,
+        users,
         isLoading: false,
       };
     }

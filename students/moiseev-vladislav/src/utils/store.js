@@ -11,7 +11,9 @@ const persistConfig = {
   key: "geekmessanger",
   storage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ["chatReducer"],
+  whitelist: [
+    //"chatReducer"
+  ],
 };
 
 export const history = createBrowserHistory();

@@ -6,7 +6,6 @@ import MessageField from '../containers/MessageField';
 import Profile from '../containers/Profile';
 import { CHAT_PATTERN } from '../constants';
 
-
 export default class Router extends React.Component {
     static propTypes = {
         chats: PropTypes.object.isRequired
@@ -22,7 +21,7 @@ export default class Router extends React.Component {
 
                     return (
                         <Layout
-                            title={`Messages: ${this.props.chats[chatId]?.title}`}
+                            title={`Messages: ${this.props.chats[chatId]?.title || ''}`}
                             chatId={chatId}>
                             <MessageField chatId={chatId} />
                         </Layout>

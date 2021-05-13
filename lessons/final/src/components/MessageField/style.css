@@ -1,0 +1,15 @@
+.message-field {
+    background-color: #e2e2e2;
+    color: #fff;
+    width: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+}

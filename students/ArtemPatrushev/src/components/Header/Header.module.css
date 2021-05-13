@@ -22,3 +22,16 @@
     font-size: 24px;
     text-decoration: none;
 }
+
+.profilePhoto {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.profileInfo {
+    display: flex;
+    align-items: center;
+}

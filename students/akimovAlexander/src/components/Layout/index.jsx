@@ -13,7 +13,7 @@ export default class Layout extends React.Component {
     };
 
     render() {
-        const { children, title, chatId } = this.props;
+        const { chatId, children, title } = this.props;
 
         return (
             <Container className="layout">

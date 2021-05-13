@@ -1,4 +1,4 @@
-import { createMiddleware } from 'redux-api-middleware';
+import { createMiddleware } from 'redux-api-middleware'
 import messageMiddleware from './messageMiddleware';
 import routerMiddleware from './routerMiddleware';
 

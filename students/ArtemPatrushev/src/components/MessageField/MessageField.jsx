@@ -1,5 +1,5 @@
 import React from 'react';
-import Message from '../Message/Message.jsx';
+import Message from '../../containers/Message.js';
 import PropTypes from 'prop-types';
 import s from './MessageField.module.css';
 import TextField from '@material-ui/core/TextField';
@@ -38,7 +38,8 @@ export default class MessageField extends React.Component {
         }
 
         const { chatId, messages } = this.props;
-        const messageId = Object.keys(messages).length + 1;
+        const lastMessageId = Number(Object.keys(messages).pop());   // с помощью данного метода берем идентификатор нашего последнего сообщения
+        const messageId = lastMessageId + 1;
 
         this.props.sendMessage({
             messageId,
@@ -51,17 +52,17 @@ export default class MessageField extends React.Component {
             input: ''
         });
 
-        setTimeout(() => {
-            const { messages } = this.props;
-            const messageId = Object.keys(messages).length + 1;
+        // setTimeout(() => {
+        //     const { messages } = this.props;
+        //     const messageId = Object.keys(messages).length + 1;
 
-            this.props.sendMessage({
-                messageId,
-                chatId,
-                text: 'I\'m robot',
-                author: 'bot'
-            });
-        }, 1000);
+        //     this.props.sendMessage({
+        //         messageId,
+        //         chatId,
+        //         text: 'I\'m robot',
+        //         author: 'bot'
+        //     });
+        // }, 1000);
     };
 
     handleClick = () => {
@@ -89,13 +90,16 @@ export default class MessageField extends React.Component {
         //     return <div className={s.emptyChat}>Check a chat</div>;  // если данное условие подходит, то рендерится эта разметка
         // }
 
-        const messageElements = chats[chatId].messageList.map((messageId) => {
+        const messageElements = chats[chatId]?.messageList.map((messageId) => {
             const { text, author } = messages[messageId];
+
             return (
                 <Message
                     key={messageId}
                     text={text}
-                    author={author} />
+                    author={author}
+                    chatId={chatId}
+                    messageId={messageId} />
             )
         });
 

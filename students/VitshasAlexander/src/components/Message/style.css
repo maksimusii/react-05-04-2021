@@ -5,12 +5,30 @@
   font-size: 16px;
   margin: 5px;
   color: #fff;
+  position: relative;
 }
 
 .message-sender {
   font-size: 14px;
   color: #aaaaaa;
+}
+
+button.message-delete {
+  position: absolute;
+  display: none;
+  top: 0;
+}
+
+.message-deleting {
+  position: absolute;
+  top: 12px;
+}
+
+.message-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+}
+
+.message-wrapper:hover .message-delete {
+  display: block;
 }

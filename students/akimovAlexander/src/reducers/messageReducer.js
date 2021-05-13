@@ -1,12 +1,13 @@
 import {
     DELETE_MESSAGE,
-    SEND_MESSAGE
+    SEND_MESSAGE,
+    LOAD_MESSAGES_REQUEST,
+    LOAD_MESSAGES_SUCCESS,
 } from '../actions/messageActions';
 
-import { LOAD_CHATS_SUCCESS } from '../actions/chatActions';
-
 const initialStore = {
-    messages: {}
+    messages: {},
+    isLoading: false
 };
 
 
@@ -16,6 +17,7 @@ export default function chatReducer(store = initialStore, action) {
             const { messageId, text, sender } = action;
 
             return {
+                ...store,
                 messages: {
                     ...store.messages,
                     [messageId]: {
@@ -36,14 +38,21 @@ export default function chatReducer(store = initialStore, action) {
                 messages: newMessages
             };
         }
-        case LOAD_CHATS_SUCCESS: {
-            const { messages } = action.payload.entities;
+        case LOAD_MESSAGES_REQUEST: {
+            return {
+                ...store,
+                isLoading: true
+            };
+        }
+
+        case LOAD_MESSAGES_SUCCESS: {
+            const { messages = {} } = action.payload.entities;
 
             return {
                 ...store,
+                isLoading: false,
                 messages
             };
-
         }
         default:
             return store;

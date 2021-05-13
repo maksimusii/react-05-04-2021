@@ -5,15 +5,17 @@ import ListItemText from "@material-ui/core/ListItemText";
 import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
 import PropTypes from "prop-types";
-import { IconButton } from "@material-ui/core";
+import { CircularProgress, IconButton } from "@material-ui/core";
 import "./style.css";
 
 export default class ChatList extends React.Component {
   static propTypes = {
+    isLoading: PropTypes.bool,
     chatId: PropTypes.string,
     chats: PropTypes.object.isRequired,
     addChat: PropTypes.func.isRequired,
-    push: PropTypes.func,
+    loadChats: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   };
 
   state = {
@@ -37,9 +39,22 @@ export default class ChatList extends React.Component {
     this.props.push(link);
   };
 
+  componentDidMount() {
+    this.props.loadChats();
+  }
+
   render() {
     const { chatName } = this.state;
-    const { chatId, chats } = this.props;
+    const { chatId, chats, isLoading } = this.props;
+
+    if (isLoading) {
+      return (
+        <div className="chat-list">
+          <CircularProgress />
+        </div>
+      );
+    }
+
     return (
       <div className="chat-list">
         <List>

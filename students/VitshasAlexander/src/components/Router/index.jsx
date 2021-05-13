@@ -5,31 +5,30 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import Layout from "../../components/Layout";
 import MessageField from "../../containers/MessageFields";
 import Profile from "../../containers/Profile";
+import { CHAT_PATTERN } from "../../constants";
 
 export default class Router extends React.Component {
   static propTypes = {
     chats: PropTypes.object.isRequired,
+    isLoaded: PropTypes.bool,
   };
   render() {
     return (
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/profile" />} />
-        <Route exact path="/chat" render={() => <Redirect to="/chat/1" />} />
         <Route
-          path="/chat/:id"
+          path={CHAT_PATTERN}
           render={(props) => {
             const chatId = props.match.params.id;
-            const { chats } = this.props;
-            if (
-              !chatId.match(/^\d+$/) ||
-              chatId === undefined ||
-              chatId > Object.keys(chats).length ||
-              chatId < 1
-            )
-              return <Redirect to="/chat/1" />;
+            const { chats, isLoaded } = this.props;
+
+            if (isLoaded && !chats[chatId]) {
+              return <Redirect to="/profile" />;
+            }
+
             return (
               <Layout
-                title={`Messages: ${chats[chatId].title}`}
+                title={`Messages: ${this.props.chats[chatId]?.title || ""}`}
                 chatId={chatId}
               >
                 <MessageField chatId={chatId} />

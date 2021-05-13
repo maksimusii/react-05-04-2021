@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "text": "Hi!",
+    "author": "Robot",
+    "chatId": 1
+  },
+  {
+    "id": 2,
+    "text": "Привет!",
+    "author": "Robot",
+    "chatId": 2
+  },
+  {
+    "chatId": 5,
+    "text": "им",
+    "author": "я",
+    "id": 6
+  },
+  {
+    "chatId": 5,
+    "text": "чсм",
+    "author": "я",
+    "id": 7
+  },
+  {
+    "chatId": 1,
+    "text": "Hello",
+    "author": "я",
+    "id": 13
+  },
+  {
+    "chatId": 2,
+    "text": "Привет, как дела?",
+    "author": "я",
+    "id": 14
+  },
+  {
+    "chatId": 3,
+    "text": "Цифры",
+    "author": "я",
+    "id": 15
+  },
+  {
+    "chatId": 4,
+    "text": "рапр",
+    "id": 16
+  },
+  {
+    "chatId": 5,
+    "text": "fgh",
+    "author": "я",
+    "id": 17
+  }
+]

@@ -1,7 +1,8 @@
-import { SEND_MESSAGE, DELETE_MESSAGE } from "../actions/messageActions";
 import {
-  ADD_CHAT,
-  DELETE_CHAT,
+  DELETE_CHAT_REQUEST,
+  DELETE_CHAT_SUCCESS,
+  ADD_CHAT_REQUEST,
+  ADD_CHAT_SUCCESS,
   MARK_CHAT_UNREAD,
   MARK_CHAT_READ,
   LOAD_CHATS_REQUEST,
@@ -12,61 +13,52 @@ import {
 const initialStore = {
   chats: {},
   isLoading: false,
+  isLoaded: false,
+  isAdding: false,
 };
 
 export default function chatReducer(store = initialStore, action) {
   switch (action.type) {
-    case SEND_MESSAGE: {
-      const { chats } = store;
-      const { messageId, chatId } = action;
+    case DELETE_CHAT_REQUEST: {
       return {
+        ...store,
         chats: {
-          ...chats,
-          [chatId]: {
-            ...chats[chatId],
-            messageList: [...chats[chatId].messageList, messageId],
+          ...store.chats,
+          [action.payload.id]: {
+            ...store.chats[action.payload.id],
+            isDeleting: true,
           },
         },
       };
     }
-    case DELETE_MESSAGE: {
-      const { messageId, chatId } = action;
+    case DELETE_CHAT_SUCCESS: {
       const { chats } = store;
-      return {
-        chats: {
-          ...chats,
-          [chatId]: {
-            ...chats[chatId],
-            messageList: [
-              ...chats[chatId].messageList.filter((item) => item !== messageId),
-            ],
-          },
-        },
-      };
-    }
-    case ADD_CHAT: {
-      const { chats } = store;
-      const lastChatId = Number(Object.keys(chats).pop());
-      const chatId = lastChatId + 1;
+      const newChats = { ...chats };
+
+      delete newChats[action.payload.id];
 
       return {
-        chats: {
-          ...chats,
-          [chatId]: {
-            title: action.title,
-            messageList: [],
-          },
-        },
+        ...store,
+        chats: newChats,
       };
     }
-    case DELETE_CHAT: {
-      const { chatId } = action;
-      const { chats } = store;
-      console.log(`Надо бы удалить чат ${chatId}`);
-      if (chatId in chats) delete chats[chatId];
+    case ADD_CHAT_REQUEST: {
       return {
+        ...store,
+        isAdding: true,
+      };
+    }
+    case ADD_CHAT_SUCCESS: {
+      const { id, title } = action.payload;
+
+      return {
+        ...store,
+        isAdding: false,
         chats: {
-          ...chats,
+          ...store.chats,
+          [id]: {
+            title: title,
+          },
         },
       };
     }
@@ -111,15 +103,15 @@ export default function chatReducer(store = initialStore, action) {
       };
     }
     case LOAD_CHATS_SUCCESS: {
-      const { chats } = action.payload.entities;
+      const { chats = {} } = action.payload.entities;
 
       return {
         ...store,
         chats,
         isLoading: false,
+        isLoaded: true,
       };
     }
-
     default:
       return store;
   }

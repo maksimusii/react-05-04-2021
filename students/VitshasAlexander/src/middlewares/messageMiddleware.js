@@ -1,32 +1,60 @@
-import { SEND_MESSAGE, sendMessage } from "../actions/messageActions";
-import { markChatUnread, markChatRead } from "../actions/chatActions";
+import {
+  deleteMessagesByChat,
+  SEND_MESSAGE_SUCCESS,
+  sendMessage,
+} from "../actions/messageActions";
+import {
+  markChatUnread,
+  markChatRead,
+  DELETE_CHAT_SUCCESS,
+} from "../actions/chatActions";
 import { matchPath } from "react-router-dom";
+import { push } from "connected-react-router";
 import { CHAT_PATTERN } from "../constants";
 
 export default (store) => (next) => (action) => {
   switch (action.type) {
-    case SEND_MESSAGE: {
-      const { chatId, sender } = action;
+    case DELETE_CHAT_SUCCESS: {
+      const { id } = action.payload;
+      const { pathname } = store.getState().router.location;
+      const { params } = matchPath(pathname, {
+        path: CHAT_PATTERN,
+        exact: true,
+      });
+      const currentChatId = params.id;
 
-      if (action.sender === "human") {
+      if (id === currentChatId) {
+        store.dispatch(push("/profile"));
+      }
+      store.dispatch(deleteMessagesByChat(id));
+      break;
+    }
+    case SEND_MESSAGE_SUCCESS: {
+      const { chatId, sender } = action.payload;
+      if (sender === "human") {
         setTimeout(() => {
           const state = store.getState();
-          const { messages } = state.messageReducer;
           const { chats } = state.chatReducer;
-          const { user } = state.profileReducer;
+          const { users } = state.profileReducer;
           const { answers } = state.answersReducer;
-          const lastMessageId = Number(Object.keys(messages).pop());
-          const messageId = lastMessageId + 1;
+          const { pathname } = store.getState().router.location;
+          const { params } = matchPath(pathname, {
+            path: CHAT_PATTERN,
+            exact: true,
+          });
+          const currentChatId = params.id;
           const sender = chats[chatId].title;
-          const userId = Number(Object.keys(user).pop());
+
+          const userId = Number(Object.keys(users).pop());
           const randomAnswer = Math.floor(
             Math.random() * Object.keys(answers).length + 1
           );
 
           const botAction = sendMessage({
-            messageId,
+            isBot: true,
+            currentChatId,
             chatId,
-            text: `${user[userId]?.firstName}! ${answers[randomAnswer].text} Я ${sender}.`,
+            text: `${users[userId]?.firstName}! ${answers[randomAnswer].text} Я ${sender}.`,
             sender: "robot",
           });
 

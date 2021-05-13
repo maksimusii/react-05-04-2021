@@ -4,24 +4,31 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Layout from '../components/Layout/Layout.jsx';
 import Profile from '../containers/Profile.js';
 import MessageField from '../containers/MessageField.js';
+import ChatList from '../containers/ChatList.js';
+import {CHAT_PATTERN} from '../constants/index.js';
 
 
 export default class Router extends React.Component {
     static propTypes = {
-        chats: PropTypes.object.isRequired
+        chats: PropTypes.object.isRequired,
+        chatId: PropTypes.string,
     };
     render() {
         return (
             <Switch>
                 <Route exact path='/' render={() => (
                     <Redirect to='/profile' />
-                )} />
-                <Route exact path='/chat/:id' render={(props) => {
+                )} />  
+                <Route exact path={CHAT_PATTERN} render={(props) => {
                     const chatId = props.match.params.id;
                     return (
                         <Layout
                             chatId={chatId}
-                            title={`Messages ${this.props.chats[chatId].title}`}>
+                            title={`Messages: ${this.props.chats[chatId]?.title}`}>
+                            <div>
+                                <ChatList
+                                    chatId={chatId} />
+                            </div>
                             <MessageField chatId={chatId} />
                         </Layout>
                     ) 
@@ -33,5 +40,6 @@ export default class Router extends React.Component {
                 )} />
             </Switch>
         )
+        debugger;
     }
 }

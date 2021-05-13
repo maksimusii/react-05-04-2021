@@ -6,15 +6,22 @@ import SideBar from '../SideBar/SideBar.jsx';
 
 export default class Profile extends React.Component {
     static propTypes = {
-        firstName: PropTypes.string.isRequired,
-        lastName: PropTypes.string.isRequired,
-        age: PropTypes.string.isRequired,
-        photo: PropTypes.string.isRequired
+        // firstName: PropTypes.string.isRequired,
+        // lastName: PropTypes.string.isRequired,
+        // age: PropTypes.string.isRequired,
+        // photo: PropTypes.string.isRequired,
+        profile: PropTypes.objectOf(PropTypes.string).isRequired,
+        loadProfile: PropTypes.func.isRequired,
     };
 
-    render() {
+    componentDidMount() {
+        this.props.loadProfile();
+    }
 
-        let { firstName, lastName, age, photo} = this.props;
+    render() {
+        // debugger
+
+        let { firstName, lastName, age, photo} = this.props.profile;
 
         return (
             // <div className={s.profileBack}>

@@ -4,16 +4,21 @@ import PropTypes from "prop-types";
 import Fab from "@material-ui/core/Fab";
 import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Message from "../../containers/Message";
 import "./style.css";
 
 export default class MessageFields extends React.Component {
   static propTypes = {
-    chats: PropTypes.object.isRequired,
-    messages: PropTypes.object.isRequired,
-    sendMessage: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool,
+    isSending: PropTypes.bool,
+
     chatId: PropTypes.string.isRequired,
+    messages: PropTypes.object.isRequired,
+
+    sendMessage: PropTypes.func.isRequired,
+    loadMessages: PropTypes.func.isRequired,
   };
 
   state = {
@@ -26,7 +31,17 @@ export default class MessageFields extends React.Component {
     this.messageFieldRef = React.createRef();
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
+    const { chatId, loadMessages } = this.props;
+
+    loadMessages(chatId);
+  }
+  componentDidUpdate(prevProps) {
+    const { chatId, loadMessages } = this.props;
+
+    if (prevProps.chatId !== chatId) {
+      loadMessages(chatId);
+    }
     this.messageFieldRef.current.scrollTop =
       this.messageFieldRef.current.scrollHeight -
       this.messageFieldRef.current.clientHeight;
@@ -37,13 +52,12 @@ export default class MessageFields extends React.Component {
 
     if (!humanInput) return;
 
-    const { chatId, messages } = this.props;
+    const { chatId } = this.props;
 
-    const lastMessageId = Number(Object.keys(messages).pop());
-    const messageId = lastMessageId + 1;
+    // const lastMessageId = Number(Object.keys(messages).pop());
+    // const messageId = lastMessageId + 1;
 
     this.props.sendMessage({
-      messageId,
       chatId,
       text: humanInput,
       sender: "human",
@@ -67,24 +81,32 @@ export default class MessageFields extends React.Component {
   };
 
   render() {
-    const { chats, chatId, messages } = this.props;
-    const messageElements = chats[chatId]?.messageList.map((messageId) => {
-      const { text, sender } = messages[messageId];
-      return (
-        <Message
-          key={messageId}
-          messageId={messageId}
-          chatId={chatId}
-          text={text}
-          sender={sender}
-        />
-      );
-    });
+    const { messages, isLoading, isSending } = this.props;
+
+    const messageElements = Object.values(messages).map(
+      ({ id, text, sender, isDeleting }) => {
+        return (
+          <Message
+            key={id}
+            messageId={id}
+            text={text}
+            isDeleting={isDeleting}
+            sender={sender}
+          />
+        );
+      }
+    );
 
     return (
       <>
         <div ref={this.messageFieldRef} className="message-field">
-          {messageElements}
+          {isLoading ? (
+            <CircularProgress />
+          ) : messageElements.length ? (
+            messageElements
+          ) : (
+            <div style={{ color: "black" }}>Список сообщений пуст</div>
+          )}
         </div>
         <div className="actions">
           <TextField
@@ -102,7 +124,7 @@ export default class MessageFields extends React.Component {
             disabled={this.state.humanInput === ""}
             onClick={this.sendMessage}
           >
-            <SendIcon />
+            {isSending ? <CircularProgress size={20} /> : <SendIcon />}
           </Fab>
         </div>
       </>

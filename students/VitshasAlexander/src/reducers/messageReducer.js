@@ -1,58 +1,91 @@
-import { SEND_MESSAGE, DELETE_MESSAGE } from "../actions/messageActions";
-import { DELETE_CHAT, LOAD_CHATS_SUCCESS } from "../actions/chatActions";
+import {
+  DELETE_MESSAGE_SUCCESS,
+  DELETE_MESSAGE_REQUEST,
+  SEND_MESSAGE_REQUEST,
+  SEND_MESSAGE_SUCCESS,
+  LOAD_MESSAGES_REQUEST,
+  LOAD_MESSAGES_SUCCESS,
+} from "../actions/messageActions";
 
 const initialStore = {
   messages: {},
+  isLoading: false,
+  isSending: false,
 };
 
 export default function messageReducer(store = initialStore, action) {
   switch (action.type) {
-    case SEND_MESSAGE: {
-      const { messageId, text, sender } = action;
-      const { messages } = store;
+    case SEND_MESSAGE_REQUEST: {
       return {
         ...store,
+        isSending: !action.payload.isBot,
+      };
+    }
+    case SEND_MESSAGE_SUCCESS: {
+      const {
+        messageId,
+        text,
+        sender,
+        isBot,
+        currentChatId,
+        chatId,
+      } = action.payload;
+
+      if (isBot && currentChatId !== chatId) {
+        return store;
+      }
+
+      return {
+        ...store,
+        isSending: false,
         messages: {
-          ...messages,
+          ...store.messages,
           [messageId]: {
+            id: messageId,
             text,
             sender,
           },
         },
       };
     }
-    case DELETE_MESSAGE: {
-      const { messageId } = action;
-      const { messages } = store;
-      const newMessages = { ...messages };
-
-      if (messageId in newMessages) delete newMessages[messageId];
-      return {
-        ...store,
-        messages: {
-          ...newMessages,
-        },
-      };
-    }
-    case DELETE_CHAT: {
-      const { messageList } = action;
-      const { messages } = store;
-      const newMessages = { ...messages };
-      messageList.forEach((messageId) => {
-        delete newMessages[messageId];
-      });
-      return {
-        ...store,
-        messages: {
-          ...newMessages,
-        },
-      };
-    }
-    case LOAD_CHATS_SUCCESS: {
-      const { messages } = action.payload.entities;
+    case DELETE_MESSAGE_REQUEST: {
+      const { id } = action.payload;
 
       return {
         ...store,
+        messages: {
+          ...store.messages,
+          [id]: {
+            ...store.messages[id],
+            isDeleting: true,
+          },
+        },
+      };
+    }
+    case DELETE_MESSAGE_SUCCESS: {
+      const { id } = action.payload;
+      // делаем копию сообщений, так как нельзя напрямую изменять store
+      const newMessages = { ...store.messages };
+      delete newMessages[id]; // удаляем по идентификатору
+
+      return {
+        ...store,
+        messages: newMessages,
+      };
+    }
+    case LOAD_MESSAGES_REQUEST: {
+      return {
+        ...store,
+        isLoading: true,
+      };
+    }
+
+    case LOAD_MESSAGES_SUCCESS: {
+      const { messages = {} } = action.payload.entities;
+
+      return {
+        ...store,
+        isLoading: false,
         messages,
       };
     }

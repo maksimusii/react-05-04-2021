@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { push, goBack, goForward } from "connected-react-router";
+import { push } from "connected-react-router";
 import {
   addChat,
   deleteChat,
@@ -11,10 +11,7 @@ import {
 import ChatList from "../components/ChatList";
 
 const mapStateToProps = (store) => {
-  return {
-    chats: store.chatReducer.chats,
-    isLoading: store.chatReducer.isLoading,
-  };
+  return store.chatReducer;
 };
 
 const mapDispatchToProps = (dispatch) =>
@@ -23,8 +20,6 @@ const mapDispatchToProps = (dispatch) =>
       addChat,
       deleteChat,
       push,
-      goBack,
-      goForward,
       markChatRead,
       markChatUnread,
       loadChats,

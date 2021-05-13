@@ -6,4 +6,4 @@ export const chats = new schema.Entity("chats", {
   messageList: [messages],
 });
 
-export const user = new schema.Entity("user");
+export const users = new schema.Entity("users");
